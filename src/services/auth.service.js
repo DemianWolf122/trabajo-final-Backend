@@ -1,0 +1,97 @@
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import userRepository from '../repositories/user.repository.js'
+import mailer_transport, { isMailerConfigured } from '../config/mailer.config.js'
+import ENVIRONMENT from '../config/environment.config.js'
+import ServerError from '../utils/ServerError.js'
+
+const DEMO_EMAIL = 'demo@chat.com'
+const DEMO_PASSWORD = 'Demo1234'
+const DEMO_NOMBRE = 'Usuario Demo'
+
+class AuthService {
+    async register(nombre, email, password) {
+        if (!nombre || nombre.length <= 2)
+            throw new ServerError('El nombre debe tener mas de 2 caracteres', 400)
+        if (!email || !/^\S+@\S+\.\S+$/.test(email))
+            throw new ServerError('Email invalido', 400)
+        if (!password || password.length < 6)
+            throw new ServerError('El password debe tener al menos 6 caracteres', 400)
+
+        const existingUser = await userRepository.getByEmail(email)
+        if (existingUser) throw new ServerError('El email ya esta registrado', 400)
+
+        const hashed_password = await bcrypt.hash(password, 12)
+        const newUser = await userRepository.create(nombre, email, hashed_password)
+
+        const verification_token = jwt.sign({ email }, ENVIRONMENT.JWT_SECRET, { expiresIn: '1d' })
+        const verification_url = `${ENVIRONMENT.URL_BACKEND}/api/auth/verify-email?verification_token=${verification_token}`
+
+        if (isMailerConfigured) {
+            await mailer_transport.sendMail({
+                from: ENVIRONMENT.GMAIL_USERNAME,
+                to: email,
+                subject: 'Verifica tu mail - Chat App',
+                html: `<h1>Bienvenido/a, ${nombre}!</h1>
+                       <p>Hace click en el siguiente link para verificar tu cuenta:</p>
+                       <a href="${verification_url}">Verificar mi cuenta</a>`
+            })
+        } else {
+            console.log(`\n[MAILER NO CONFIGURADO] Link de verificacion para ${email}:\n${verification_url}\n`)
+        }
+
+        const result = { id: newUser._id, nombre: newUser.nombre, email: newUser.email }
+        if (!isMailerConfigured) result.verification_url = verification_url
+        return result
+    }
+
+    async verifyEmail(verification_token) {
+        let payload
+        try {
+            payload = jwt.verify(verification_token, ENVIRONMENT.JWT_SECRET)
+        } catch (error) {
+            throw new ServerError('Token de verificacion invalido o expirado', 400)
+        }
+
+        const user = await userRepository.getByEmail(payload.email)
+        if (!user) throw new ServerError('Usuario no encontrado', 404)
+        if (user.email_verificado) throw new ServerError('Este email ya fue verificado', 400)
+
+        await userRepository.updateById(user._id, { email_verificado: true })
+    }
+
+    async login(email, password) {
+        if (!email || !password) throw new ServerError('Email y password son requeridos', 400)
+
+        const user = await userRepository.getByEmail(email)
+        if (!user) throw new ServerError('Credenciales invalidas', 401)
+
+        const passwordOk = await bcrypt.compare(password, user.password)
+        if (!passwordOk) throw new ServerError('Credenciales invalidas', 401)
+
+        if (!user.email_verificado) throw new ServerError('Debes verificar tu email antes de iniciar sesion', 403)
+
+        return this._buildSession(user)
+    }
+
+    // Login de invitado: entra con el usuario demo (lo crea si no existe). No requiere password.
+    async guestLogin() {
+        let user = await userRepository.getByEmail(DEMO_EMAIL)
+        if (!user) {
+            const hashed_password = await bcrypt.hash(DEMO_PASSWORD, 12)
+            user = await userRepository.create(DEMO_NOMBRE, DEMO_EMAIL, hashed_password)
+            user = await userRepository.updateById(user._id, { email_verificado: true })
+        }
+        return this._buildSession(user)
+    }
+
+    _buildSession(user) {
+        const token = jwt.sign({ id: user._id, email: user.email }, ENVIRONMENT.JWT_SECRET, {
+            expiresIn: ENVIRONMENT.JWT_EXPIRES_IN
+        })
+        return { token, user: { id: user._id, nombre: user.nombre, email: user.email } }
+    }
+}
+
+const authService = new AuthService()
+export default authService
