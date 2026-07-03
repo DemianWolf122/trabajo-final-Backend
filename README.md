@@ -2,7 +2,11 @@
 
 Backend del TP integrador (Full-Stack: React + Express) de una **app de mensajería tipo WhatsApp**: gestión de contactos y mensajes con autenticación completa.
 
+- **API en producción:** https://trabajo-final-backend-etnv.onrender.com
+- **Frontend (web):** https://trabajo-final-front-end-clonwhatsap.vercel.app
 - **Repo del frontend:** https://github.com/DemianWolf122/trabajo-final-FrontEnd
+
+> Nota: la API está en el plan gratuito de Render, que "se duerme" tras inactividad. La primera petición puede tardar ~50 segundos (arranque en frío); las siguientes son inmediatas.
 
 ## Stack
 
@@ -87,5 +91,6 @@ Todas las respuestas tienen la forma `{ message, ok, status, data? }`.
 
 ## Deploy
 
-- **Backend:** Render → (completar con la URL pública)
+- **Backend:** desplegado en [Render](https://render.com) → https://trabajo-final-backend-etnv.onrender.com
+- **Frontend:** desplegado en [Vercel](https://vercel.com) → https://trabajo-final-front-end-clonwhatsap.vercel.app
 - Base de datos: MongoDB Atlas.
