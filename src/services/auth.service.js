@@ -6,8 +6,8 @@ import ENVIRONMENT from '../config/environment.config.js'
 import ServerError from '../utils/ServerError.js'
 
 const DEMO_EMAIL = 'demo@chat.com'
-const DEMO_PASSWORD = 'Demo1234'
-const DEMO_NOMBRE = 'Usuario Demo'
+const DEMO_PASSWORD = 'ChatApp2026'
+const DEMO_NOMBRE = 'Demian Wolf'
 
 class AuthService {
     async register(nombre, email, password) {

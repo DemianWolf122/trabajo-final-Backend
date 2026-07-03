@@ -53,7 +53,7 @@ Relación: cada **Mensaje** referencia a un **Contacto** (`ref` + `populate`), y
 `npm run seed` crea este usuario con el mail ya verificado y contactos/mensajes de ejemplo:
 
 - **Email:** `demo@chat.com`
-- **Password:** `Demo1234`
+- **Password:** `ChatApp2026`
 
 También existe **login de invitado**: `POST /api/auth/guest`.
 
