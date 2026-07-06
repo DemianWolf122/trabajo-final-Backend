@@ -17,9 +17,21 @@ class ContactoService {
         return await contactoRepository.create(data, userId)
     }
 
+    // Campos que el cliente tiene permitido modificar en un update.
+    // Nunca se actualiza el objeto entero recibido (evita pisar fk_usuario, fecha_creacion, etc).
+    static CAMPOS_EDITABLES = ['nombre', 'profile_picture', 'isGroup']
+
     async update(id, data, userId) {
         await this._getOwned(id, userId)
-        return await contactoRepository.updateById(id, data)
+
+        const cambios = {}
+        for (const campo of ContactoService.CAMPOS_EDITABLES) {
+            if (data[campo] !== undefined) cambios[campo] = data[campo]
+        }
+        if (Object.keys(cambios).length === 0)
+            throw new ServerError('No se envio ningun campo valido para actualizar', 400)
+
+        return await contactoRepository.updateById(id, cambios)
     }
 
     async remove(id, userId) {

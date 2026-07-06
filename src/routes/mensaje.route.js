@@ -1,15 +1,23 @@
 import { Router } from 'express'
 import mensajeController from '../controllers/mensaje.controller.js'
 import authMiddleware from '../middleware/auth.middleware.js'
-import validateFields from '../middleware/validate.middleware.js'
+import validateFields, { validateObjectId } from '../middleware/validate.middleware.js'
 
 const router = Router()
 
 router.use(authMiddleware)
 
-router.get('/', mensajeController.getByContacto)                         // /api/mensajes?contactoId=...
-router.post('/', validateFields(['texto', 'contactoId']), mensajeController.create)
-router.delete('/vaciar/:contactoId', mensajeController.vaciarChat)       // vaciar todo el chat
-router.delete('/:id', mensajeController.remove)                         // borrar un mensaje
+// Reglas de validacion para crear mensajes
+const mensajeRules = {
+    texto: { required: true, type: 'string', min: 1, max: 2000 },
+    contactoId: { required: true, type: 'string' },
+    send_by_me: { type: 'boolean' },
+    leido: { type: 'boolean' }
+}
+
+router.get('/', validateObjectId('contactoId', 'query'), mensajeController.getByContacto)   // /api/mensajes?contactoId=...
+router.post('/', validateFields(mensajeRules), validateObjectId('contactoId', 'body'), mensajeController.create)
+router.delete('/vaciar/:contactoId', validateObjectId('contactoId'), mensajeController.vaciarChat)
+router.delete('/:id', validateObjectId('id'), mensajeController.remove)
 
 export default router
