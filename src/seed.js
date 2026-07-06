@@ -6,7 +6,7 @@ import Contacto from './models/contacto.model.js'
 import Mensaje from './models/mensaje.model.js'
 import Comunidad from './models/comunidad.model.js'
 
-const DEMO = { nombre: 'Demian Wolf', email: 'demo@chat.com', password: 'ChatApp2026' }
+const DEMO = { nombre: 'demianfredes', email: 'demianfredes@gmail.com', password: 'demianfredes1234' }
 
 const seed = async () => {
     try {

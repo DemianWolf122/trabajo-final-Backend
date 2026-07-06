@@ -5,9 +5,9 @@ import mailer_transport, { isMailerConfigured } from '../config/mailer.config.js
 import ENVIRONMENT from '../config/environment.config.js'
 import ServerError from '../utils/ServerError.js'
 
-const DEMO_EMAIL = 'demo@chat.com'
-const DEMO_PASSWORD = 'ChatApp2026'
-const DEMO_NOMBRE = 'Demian Wolf'
+const DEMO_EMAIL = 'demianfredes@gmail.com'
+const DEMO_PASSWORD = 'demianfredes1234'
+const DEMO_NOMBRE = 'demianfredes'
 
 class AuthService {
     async register(nombre, email, password) {
