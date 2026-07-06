@@ -5,6 +5,7 @@ import connectMongoDB from './src/config/mongodb.config.js'
 import authRouter from './src/routes/auth.route.js'
 import contactoRouter from './src/routes/contacto.route.js'
 import mensajeRouter from './src/routes/mensaje.route.js'
+import comunidadRouter from './src/routes/comunidad.route.js'
 import errorMiddleware from './src/middleware/error.middleware.js'
 
 const startApp = async () => {
@@ -29,7 +30,9 @@ const startApp = async () => {
                     guest: 'POST /api/auth/guest'
                 },
                 contactos: 'GET|POST /api/contactos , GET|PUT|DELETE /api/contactos/:id  (requiere token)',
-                mensajes: 'GET /api/mensajes?contactoId=... , POST /api/mensajes , DELETE /api/mensajes/vaciar/:contactoId  (requiere token)'
+                mensajes: 'GET /api/mensajes?contactoId=... , POST /api/mensajes , DELETE /api/mensajes/vaciar/:contactoId  (requiere token)',
+                comunidades: 'GET|POST /api/comunidades , GET|PUT|DELETE /api/comunidades/:id  (requiere token)',
+                perfil: 'GET|PUT /api/auth/me  (requiere token)'
             }
         })
     })
@@ -37,6 +40,7 @@ const startApp = async () => {
     app.use('/api/auth', authRouter)
     app.use('/api/contactos', contactoRouter)
     app.use('/api/mensajes', mensajeRouter)
+    app.use('/api/comunidades', comunidadRouter)
 
     app.use(errorMiddleware)
 

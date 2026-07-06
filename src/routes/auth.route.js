@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import authController from '../controllers/auth.controller.js'
+import authMiddleware from '../middleware/auth.middleware.js'
 import validateFields from '../middleware/validate.middleware.js'
 
 const router = Router()
@@ -20,5 +21,9 @@ router.post('/login', validateFields({
 }), authController.login)
 
 router.post('/guest', authController.guestLogin)
+
+// Perfil del usuario logueado (protegido)
+router.get('/me', authMiddleware, authController.me)
+router.put('/me', authMiddleware, validateFields({ nombre: { required: true, type: 'string', min: 3, max: 50 } }), authController.updateMe)
 
 export default router

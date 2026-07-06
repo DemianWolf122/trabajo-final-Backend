@@ -4,6 +4,7 @@ import connectMongoDB from './config/mongodb.config.js'
 import User from './models/user.model.js'
 import Contacto from './models/contacto.model.js'
 import Mensaje from './models/mensaje.model.js'
+import Comunidad from './models/comunidad.model.js'
 
 const DEMO = { nombre: 'Demian Wolf', email: 'demo@chat.com', password: 'ChatApp2026' }
 
@@ -11,14 +12,15 @@ const seed = async () => {
     try {
         await connectMongoDB()
 
-        // Idempotente: si ya existe el demo, lo borramos junto a sus datos y lo recreamos limpio.
-        const anterior = await User.findOne({ email: DEMO.email })
-        if (anterior) {
-            const contactos = await Contacto.find({ fk_usuario: anterior._id })
-            await Mensaje.deleteMany({ fk_usuario: anterior._id })
-            await Contacto.deleteMany({ fk_usuario: anterior._id })
-            await User.deleteOne({ _id: anterior._id })
+        // Idempotente: borramos TODOS los usuarios demo (por si quedaron duplicados de seeds
+        // anteriores) junto a todos sus datos, y recreamos uno limpio.
+        const anteriores = await User.find({ email: DEMO.email })
+        for (const u of anteriores) {
+            await Mensaje.deleteMany({ fk_usuario: u._id })
+            await Contacto.deleteMany({ fk_usuario: u._id })
+            await Comunidad.deleteMany({ fk_usuario: u._id })
         }
+        await User.deleteMany({ email: DEMO.email })
 
         const hashed_password = await bcrypt.hash(DEMO.password, 12)
         const user = await User.create({
@@ -40,6 +42,31 @@ const seed = async () => {
             { texto: 'Totalmente. Mañana me llega una de ensamble, sale video sí o sí.', send_by_me: false, leido: true, fk_contacto: nate._id, fk_usuario: user._id },
             { texto: '¡Hola! ¿Cómo venís con el curso de React?', send_by_me: false, leido: true, fk_contacto: midu._id, fk_usuario: user._id },
             { texto: 'Hola Midu! Remando un poco con los Hooks, pero armando un clon re cheto.', send_by_me: true, leido: true, fk_contacto: midu._id, fk_usuario: user._id }
+        ])
+
+        // Comunidades de ejemplo
+        await Comunidad.create([
+            {
+                nombre: 'UTN Programación Web',
+                descripcion: 'Comunidad oficial de alumnos de la UTN. Avisos, dudas y proyectos.',
+                icon: 'https://ui-avatars.com/api/?name=UTN&background=0055A4&color=fff&rounded=true',
+                groups: [
+                    { nombre: 'Avisos Oficiales', unread: 2 },
+                    { nombre: 'Dudas Front-End (Martes/Jueves)', unread: 15 },
+                    { nombre: 'Off-topic / Memes', unread: 0 }
+                ],
+                fk_usuario: user._id
+            },
+            {
+                nombre: 'Dev Team',
+                descripcion: 'Coordinación y desarrollo de la app web.',
+                icon: 'https://ui-avatars.com/api/?name=Dev+Team&background=25D366&color=fff&rounded=true',
+                groups: [
+                    { nombre: 'General', unread: 0 },
+                    { nombre: 'Deploy & DevOps', unread: 1 }
+                ],
+                fk_usuario: user._id
+            }
         ])
 
         console.log('\n✅ Seed completado.')

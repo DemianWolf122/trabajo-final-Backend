@@ -61,6 +61,25 @@ class AuthController {
             next(error)
         }
     }
+
+    // Perfil del usuario logueado (protegido por authMiddleware)
+    async me(req, res, next) {
+        try {
+            const user = await authService.getPerfil(req.user.id)
+            return res.status(200).json({ message: 'Perfil obtenido', ok: true, status: 200, data: { user } })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async updateMe(req, res, next) {
+        try {
+            const user = await authService.updatePerfil(req.user.id, req.body)
+            return res.status(200).json({ message: 'Perfil actualizado', ok: true, status: 200, data: { user } })
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 const authController = new AuthController()

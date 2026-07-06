@@ -85,6 +85,36 @@ class AuthService {
         return this._buildSession(user)
     }
 
+    // Perfil del usuario logueado (sin exponer el password).
+    async getPerfil(userId) {
+        const user = await userRepository.getById(userId)
+        if (!user) throw new ServerError('Usuario no encontrado', 404)
+        return this._publicUser(user)
+    }
+
+    // Actualiza el perfil. Solo se permite cambiar el nombre (whitelist);
+    // el email no se cambia acá porque implicaria re-verificar la cuenta.
+    async updatePerfil(userId, data) {
+        const user = await userRepository.getById(userId)
+        if (!user) throw new ServerError('Usuario no encontrado', 404)
+
+        const cambios = {}
+        if (data.nombre !== undefined) {
+            if (typeof data.nombre !== 'string' || data.nombre.trim().length < 3)
+                throw new ServerError('El nombre debe tener al menos 3 caracteres', 400)
+            cambios.nombre = data.nombre.trim()
+        }
+        if (Object.keys(cambios).length === 0)
+            throw new ServerError('No se envio ningun campo valido para actualizar', 400)
+
+        const actualizado = await userRepository.updateById(userId, cambios)
+        return this._publicUser(actualizado)
+    }
+
+    _publicUser(user) {
+        return { id: user._id, nombre: user.nombre, email: user.email, email_verificado: user.email_verificado, fecha_creacion: user.fecha_creacion }
+    }
+
     _buildSession(user) {
         const token = jwt.sign({ id: user._id, email: user.email }, ENVIRONMENT.JWT_SECRET, {
             expiresIn: ENVIRONMENT.JWT_EXPIRES_IN
