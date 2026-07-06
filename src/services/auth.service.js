@@ -4,6 +4,7 @@ import userRepository from '../repositories/user.repository.js'
 import mailer_transport, { isMailerConfigured } from '../config/mailer.config.js'
 import ENVIRONMENT from '../config/environment.config.js'
 import ServerError from '../utils/ServerError.js'
+import { crearDatosDeEjemplo } from '../data/defaultData.js'
 
 const DEMO_EMAIL = 'demianfredes@gmail.com'
 const DEMO_PASSWORD = 'demianfredes1234'
@@ -23,6 +24,10 @@ class AuthService {
 
         const hashed_password = await bcrypt.hash(password, 12)
         const newUser = await userRepository.create(nombre, email, hashed_password)
+
+        // Cada usuario nuevo arranca con contactos, conversaciones y comunidades de ejemplo,
+        // así cada apartado tiene contenido por default.
+        await crearDatosDeEjemplo(newUser._id)
 
         const verification_token = jwt.sign({ email }, ENVIRONMENT.JWT_SECRET, { expiresIn: '1d' })
         const verification_url = `${ENVIRONMENT.URL_BACKEND}/api/auth/verify-email?verification_token=${verification_token}`
@@ -81,6 +86,7 @@ class AuthService {
             const hashed_password = await bcrypt.hash(DEMO_PASSWORD, 12)
             user = await userRepository.create(DEMO_NOMBRE, DEMO_EMAIL, hashed_password)
             user = await userRepository.updateById(user._id, { email_verificado: true })
+            await crearDatosDeEjemplo(user._id)
         }
         return this._buildSession(user)
     }
