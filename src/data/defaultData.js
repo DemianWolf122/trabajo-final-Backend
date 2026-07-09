@@ -17,25 +17,27 @@ export const crearDatosDeEjemplo = async (userId) => {
     const devtalles = await Contacto.create({ nombre: 'DevTalles (Fazt)', profile_picture: 'https://unavatar.io/youtube/fazttech', isGroup: true, fk_usuario: userId })
 
     await Mensaje.create([
-        // Nate Gentile — hardware
-        { texto: 'Che, ¿viste los rumores de las nuevas RTX 5090?', send_by_me: false, leido: true, fk_contacto: nate._id, fk_usuario: userId, fecha: t(60) },
-        { texto: '¡Una locura total! Pero hay que vender un riñón y medio para armar ese setup.', send_by_me: true, leido: true, fk_contacto: nate._id, fk_usuario: userId, fecha: t(55) },
-        { texto: 'Totalmente. Mañana me llega una de ensamble, sale video con refrigeración custom sí o sí.', send_by_me: false, leido: true, fk_contacto: nate._id, fk_usuario: userId, fecha: t(50) },
-        { texto: '¡Avisá cuando lo subas!', send_by_me: true, leido: true, fk_contacto: nate._id, fk_usuario: userId, fecha: t(45) },
-        { texto: 'Obvio, le voy a meter tubos rígidos de acrílico.', send_by_me: false, leido: false, fk_contacto: nate._id, fk_usuario: userId, fecha: t(44) },
+        // Nate Gentile — hardware (me habla a mí)
+        { texto: 'Hola Demian! ¿Al final te armaste la PC nueva?', send_by_me: false, leido: true, fk_contacto: nate._id, fk_usuario: userId, fecha: t(60) },
+        { texto: 'Todavía no, estoy juntando para la placa 😅', send_by_me: true, leido: true, fk_contacto: nate._id, fk_usuario: userId, fecha: t(55) },
+        { texto: 'Dale que las RTX 5090 ya están saliendo, te van a volar la cabeza.', send_by_me: false, leido: true, fk_contacto: nate._id, fk_usuario: userId, fecha: t(50) },
+        { texto: 'Jaja obvio, apenas la tenga te muestro el setup.', send_by_me: true, leido: true, fk_contacto: nate._id, fk_usuario: userId, fecha: t(45) },
+        { texto: 'De una Demian, avisame así hacemos un stream juntos.', send_by_me: false, leido: false, fk_contacto: nate._id, fk_usuario: userId, fecha: t(44) },
 
-        // Suprapixel — audio
-        { texto: 'Buenas! ¿Pudiste probar los auriculares Sony que te mandé?', send_by_me: false, leido: true, fk_contacto: supra._id, fk_usuario: userId, fecha: t(120) },
-        { texto: 'Sí Nico, el ANC que tienen es increíble, te aísla de todo el ruido del bondi.', send_by_me: true, leido: true, fk_contacto: supra._id, fk_usuario: userId, fecha: t(115) },
+        // Suprapixel — audio (me habla a mí)
+        { texto: 'Demian, ¿probaste los auriculares que te recomendé?', send_by_me: false, leido: true, fk_contacto: supra._id, fk_usuario: userId, fecha: t(120) },
+        { texto: 'Sí, una locura el sonido. Gracias por el dato!', send_by_me: true, leido: true, fk_contacto: supra._id, fk_usuario: userId, fecha: t(115) },
+        { texto: 'Buenísimo! Cualquier cosa que necesites para grabar, avisame.', send_by_me: false, leido: false, fk_contacto: supra._id, fk_usuario: userId, fecha: t(114) },
 
-        // Midudev — programación
-        { texto: '¡Hola! ¿Cómo venís con el curso de React?', send_by_me: false, leido: true, fk_contacto: midu._id, fk_usuario: userId, fecha: t(180) },
-        { texto: 'Hola Midu! Remando un poco con los Hooks, pero armando un clon re cheto.', send_by_me: true, leido: true, fk_contacto: midu._id, fk_usuario: userId, fecha: t(175) },
+        // Midudev — programación (me habla a mí)
+        { texto: 'Hola Demian! ¿Cómo va tu proyecto final de React?', send_by_me: false, leido: true, fk_contacto: midu._id, fk_usuario: userId, fecha: t(180) },
+        { texto: 'Bien Midu, ya lo tengo casi listo, un clon de WhatsApp.', send_by_me: true, leido: true, fk_contacto: midu._id, fk_usuario: userId, fecha: t(175) },
+        { texto: 'Genial! Si querés lo reviso y te tiro feedback.', send_by_me: false, leido: false, fk_contacto: midu._id, fk_usuario: userId, fecha: t(174) },
 
-        // DevTalles — grupo (con sender_name)
-        { texto: 'Gente, subí un nuevo video sobre Node.js y Supabase.', send_by_me: false, leido: true, sender_name: 'Fazt', fk_contacto: devtalles._id, fk_usuario: userId, fecha: t(240) },
-        { texto: '¡Ufff me viene de diez para el backend de mi proyecto final!', send_by_me: true, leido: true, fk_contacto: devtalles._id, fk_usuario: userId, fecha: t(235) },
-        { texto: '¿Alguien sabe si Supabase soporta triggers de Postgres nativos?', send_by_me: false, leido: false, sender_name: 'UsuarioRandom123', fk_contacto: devtalles._id, fk_usuario: userId, fecha: t(230) }
+        // DevTalles — grupo (me nombran)
+        { texto: 'Che Demian, subí un video de Node que te puede servir para el back.', send_by_me: false, leido: true, sender_name: 'Fazt', fk_contacto: devtalles._id, fk_usuario: userId, fecha: t(240) },
+        { texto: '¡Gracias Fazt! justo estoy con esa parte.', send_by_me: true, leido: true, fk_contacto: devtalles._id, fk_usuario: userId, fecha: t(235) },
+        { texto: 'Demian, ¿nos pasás tu repo cuando lo termines?', send_by_me: false, leido: false, sender_name: 'Lucas', fk_contacto: devtalles._id, fk_usuario: userId, fecha: t(230) }
     ])
 
     // --- Comunidades de ejemplo ---
