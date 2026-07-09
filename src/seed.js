@@ -13,8 +13,7 @@ const seed = async () => {
     try {
         await connectMongoDB()
 
-        // Idempotente: borramos TODOS los usuarios demo (por si quedaron duplicados de seeds
-        // anteriores) junto a todos sus datos, y recreamos uno limpio.
+        // Borramos el/los usuario/s demo de antes con todos sus datos y lo recreamos de cero.
         const anteriores = await User.find({ email: DEMO.email })
         for (const u of anteriores) {
             await Mensaje.deleteMany({ fk_usuario: u._id })

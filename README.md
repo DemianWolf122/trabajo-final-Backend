@@ -72,6 +72,8 @@ También existe **login de invitado**: `POST /api/auth/guest`.
 
 ## Documentación de endpoints
 
+También podés importar la colección de Postman `postman_collection.json` (en la raíz del repo) para probar la API. Pasos: en Postman → Import → elegí el archivo. Primero corré **Login**, copiá el `token` de la respuesta y pegalo en la variable `token` de la colección; con eso las rutas protegidas ya funcionan.
+
 Todas las respuestas tienen la forma `{ message, ok, status, data? }`.
 
 ### Auth — `/api/auth` (públicas)

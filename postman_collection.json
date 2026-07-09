@@ -1,0 +1,156 @@
+{
+  "info": {
+    "name": "Chat App API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://trabajo-final-backend-etnv.onrender.com" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registrar usuario",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Nuevo Usuario\",\n  \"email\": \"nuevo@test.com\",\n  \"password\": \"clave123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Verificar email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/auth/verify-email?verification_token=PEGAR_TOKEN", "host": ["{{baseUrl}}"], "path": ["api", "auth", "verify-email"], "query": [ { "key": "verification_token", "value": "PEGAR_TOKEN" } ] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"demianfredes@gmail.com\",\n  \"password\": \"demianfredes1234\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contactos",
+      "item": [
+        {
+          "name": "Listar contactos",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/contactos", "host": ["{{baseUrl}}"], "path": ["api", "contactos"] }
+          }
+        },
+        {
+          "name": "Crear contacto",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Carlos\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/contactos", "host": ["{{baseUrl}}"], "path": ["api", "contactos"] }
+          }
+        },
+        {
+          "name": "Editar contacto",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Carlos Editado\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/contactos/ID_DEL_CONTACTO", "host": ["{{baseUrl}}"], "path": ["api", "contactos", "ID_DEL_CONTACTO"] }
+          }
+        },
+        {
+          "name": "Borrar contacto",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/contactos/ID_DEL_CONTACTO", "host": ["{{baseUrl}}"], "path": ["api", "contactos", "ID_DEL_CONTACTO"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mensajes",
+      "item": [
+        {
+          "name": "Listar mensajes de un contacto",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/mensajes?contactoId=ID_DEL_CONTACTO", "host": ["{{baseUrl}}"], "path": ["api", "mensajes"], "query": [ { "key": "contactoId", "value": "ID_DEL_CONTACTO" } ] }
+          }
+        },
+        {
+          "name": "Enviar mensaje",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"texto\": \"Hola!\",\n  \"contactoId\": \"ID_DEL_CONTACTO\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/mensajes", "host": ["{{baseUrl}}"], "path": ["api", "mensajes"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comunidades",
+      "item": [
+        {
+          "name": "Listar comunidades",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/comunidades", "host": ["{{baseUrl}}"], "path": ["api", "comunidades"] }
+          }
+        },
+        {
+          "name": "Crear comunidad",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Mi Comunidad\",\n  \"descripcion\": \"Descripcion de ejemplo\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/comunidades", "host": ["{{baseUrl}}"], "path": ["api", "comunidades"] }
+          }
+        },
+        {
+          "name": "Borrar comunidad",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/comunidades/ID_DE_LA_COMUNIDAD", "host": ["{{baseUrl}}"], "path": ["api", "comunidades", "ID_DE_LA_COMUNIDAD"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Perfil",
+      "item": [
+        {
+          "name": "Ver mi perfil",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
+        },
+        {
+          "name": "Editar mi perfil",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Mi Nuevo Nombre\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,7 @@
 import mongoose from 'mongoose'
 import ServerError from '../utils/ServerError.js'
 
-// Valida que un parametro de ruta o de query sea un ObjectId valido de MongoDB.
-// Evita consultar la base con IDs malformados (CastError).
+// Chequea que el id de la ruta o query sea un ObjectId valido antes de buscar en la base.
 export const validateObjectId = (paramName, source = 'params') => (req, res, next) => {
     const value = req[source][paramName]
     if (!value || !mongoose.isValidObjectId(value))
@@ -10,14 +9,9 @@ export const validateObjectId = (paramName, source = 'params') => (req, res, nex
     next()
 }
 
-// Middleware factory: valida los campos del body segun reglas.
-// Reglas soportadas por campo:
-//   required (bool) - el campo debe venir y no estar vacio
-//   type ('string'|'boolean'|'number') - tipo de dato esperado
-//   min / max (number) - longitud minima/maxima para strings
-//   regex (RegExp) + regexMsg (string) - formato especifico (ej: email)
+// Valida los campos del body: si son requeridos, el tipo, el largo (min/max) y el formato (regex).
 const validateFields = (rules) => (req, res, next) => {
-    // Compatibilidad: si llega un array de nombres, se convierte a reglas "required".
+    // Si me pasan solo una lista de nombres, los tomo como requeridos.
     if (Array.isArray(rules)) {
         rules = Object.fromEntries(rules.map(f => [f, { required: true }]))
     }
