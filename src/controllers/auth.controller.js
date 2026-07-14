@@ -5,7 +5,8 @@ class AuthController {
     async register(req, res, next) {
         try {
             const { nombre, email, password } = req.body
-            const user = await authService.register(nombre, email, password)
+            const baseUrl = `${req.protocol}://${req.get('host')}`
+            const user = await authService.register(nombre, email, password, baseUrl)
             return res.status(201).json({
                 message: 'Usuario registrado con exito. Revisa tu mail para verificar la cuenta.',
                 ok: true,

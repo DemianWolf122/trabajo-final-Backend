@@ -13,6 +13,9 @@ const startApp = async () => {
 
     const app = express()
 
+    // En Render la app corre detras de un proxy; sin esto req.protocol seria http.
+    app.set('trust proxy', 1)
+
     app.use(cors())
     app.use(express.json())
 

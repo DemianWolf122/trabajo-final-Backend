@@ -11,7 +11,7 @@ const DEMO_PASSWORD = 'demianfredes1234'
 const DEMO_NOMBRE = 'demianfredes'
 
 class AuthService {
-    async register(nombre, email, password) {
+    async register(nombre, email, password, baseUrl) {
         if (!nombre || nombre.length <= 2)
             throw new ServerError('El nombre debe tener mas de 2 caracteres', 400)
         if (!email || !/^\S+@\S+\.\S+$/.test(email))
@@ -30,7 +30,9 @@ class AuthService {
         await crearDatosDeEjemplo(newUser._id)
 
         const verification_token = jwt.sign({ email }, ENVIRONMENT.JWT_SECRET, { expiresIn: '1d' })
-        const verification_url = `${ENVIRONMENT.URL_BACKEND}/api/auth/verify-email?verification_token=${verification_token}`
+        // Si URL_BACKEND no esta en el .env, uso la URL con la que llego el pedido.
+        const base = ENVIRONMENT.URL_BACKEND || baseUrl
+        const verification_url = `${base}/api/auth/verify-email?verification_token=${verification_token}`
 
         if (isMailerConfigured) {
             await mailer_transport.sendMail({
