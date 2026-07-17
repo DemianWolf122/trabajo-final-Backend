@@ -28,6 +28,11 @@ class MensajeService {
         await mensajeRepository.deleteAllByContacto(contactoId)
     }
 
+    async marcarLeidos(contactoId, userId) {
+        await this._assertContactoDelUsuario(contactoId, userId)
+        await mensajeRepository.marcarLeidos(contactoId)
+    }
+
     async remove(id, userId) {
         const mensaje = await mensajeRepository.getById(id)
         if (!mensaje) throw new ServerError('Mensaje no encontrado', 404)

@@ -20,8 +20,6 @@ router.post('/login', validateFields({
     password: { required: true, type: 'string' }
 }), authController.login)
 
-router.post('/guest', authController.guestLogin)
-
 // Perfil del usuario logueado (protegido)
 router.get('/me', authMiddleware, authController.me)
 router.put('/me', authMiddleware, validateFields({ nombre: { required: true, type: 'string', min: 3, max: 50 } }), authController.updateMe)

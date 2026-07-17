@@ -11,11 +11,6 @@ export const validateObjectId = (paramName, source = 'params') => (req, res, nex
 
 // Valida los campos del body: si son requeridos, el tipo, el largo (min/max) y el formato (regex).
 const validateFields = (rules) => (req, res, next) => {
-    // Si me pasan solo una lista de nombres, los tomo como requeridos.
-    if (Array.isArray(rules)) {
-        rules = Object.fromEntries(rules.map(f => [f, { required: true }]))
-    }
-
     for (const [field, rule] of Object.entries(rules)) {
         const value = req.body[field]
         const vacio = value === undefined || value === null || value === ''

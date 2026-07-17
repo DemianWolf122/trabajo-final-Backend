@@ -17,6 +17,7 @@ const mensajeRules = {
 
 router.get('/', validateObjectId('contactoId', 'query'), mensajeController.getByContacto)   // /api/mensajes?contactoId=...
 router.post('/', validateFields(mensajeRules), validateObjectId('contactoId', 'body'), mensajeController.create)
+router.put('/leer/:contactoId', validateObjectId('contactoId'), mensajeController.marcarLeidos)
 router.delete('/vaciar/:contactoId', validateObjectId('contactoId'), mensajeController.vaciarChat)
 router.delete('/:id', validateObjectId('id'), mensajeController.remove)
 

@@ -23,6 +23,10 @@ class MensajeRepository {
     async deleteAllByContacto(contactoId) {
         return await Mensaje.deleteMany({ fk_contacto: contactoId })
     }
+
+    async marcarLeidos(contactoId) {
+        return await Mensaje.updateMany({ fk_contacto: contactoId, send_by_me: false }, { leido: true })
+    }
 }
 
 const mensajeRepository = new MensajeRepository()

@@ -6,10 +6,6 @@ import ENVIRONMENT from '../config/environment.config.js'
 import ServerError from '../utils/ServerError.js'
 import { crearDatosDeEjemplo } from '../data/defaultData.js'
 
-const DEMO_EMAIL = 'demianfredes@gmail.com'
-const DEMO_PASSWORD = 'demianfredes1234'
-const DEMO_NOMBRE = 'demianfredes'
-
 class AuthService {
     async register(nombre, email, password, baseUrl) {
         if (!nombre || nombre.length <= 2)
@@ -78,18 +74,6 @@ class AuthService {
 
         if (!user.email_verificado) throw new ServerError('Debes verificar tu email antes de iniciar sesion', 403)
 
-        return this._buildSession(user)
-    }
-
-    // Login de invitado: entra con el usuario demo (lo crea si no existe). No requiere password.
-    async guestLogin() {
-        let user = await userRepository.getByEmail(DEMO_EMAIL)
-        if (!user) {
-            const hashed_password = await bcrypt.hash(DEMO_PASSWORD, 12)
-            user = await userRepository.create(DEMO_NOMBRE, DEMO_EMAIL, hashed_password)
-            user = await userRepository.updateById(user._id, { email_verificado: true })
-            await crearDatosDeEjemplo(user._id)
-        }
         return this._buildSession(user)
     }
 

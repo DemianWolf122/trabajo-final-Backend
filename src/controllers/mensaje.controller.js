@@ -31,6 +31,15 @@ class MensajeController {
         }
     }
 
+    async marcarLeidos(req, res, next) {
+        try {
+            await mensajeService.marcarLeidos(req.params.contactoId, req.user.id)
+            return res.status(200).json({ message: 'Mensajes marcados como leidos', ok: true, status: 200 })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async remove(req, res, next) {
         try {
             await mensajeService.remove(req.params.id, req.user.id)

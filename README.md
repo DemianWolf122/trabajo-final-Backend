@@ -54,7 +54,9 @@ Las respuestas tienen la forma `{ message, ok, status, data? }`. Las rutas marca
 **Mensajes** `/api/mensajes` 🔒
 - `GET /?contactoId=...` — mensajes de un contacto.
 - `POST /` — `{ texto, contactoId }` — enviar.
+- `PUT /leer/:contactoId` — marca los mensajes del chat como leídos.
 - `DELETE /vaciar/:contactoId` — vaciar el chat.
+- `DELETE /:id` — borrar un mensaje.
 
 **Comunidades** `/api/comunidades` 🔒
 - `GET /` · `GET /:id` — listar / ver.

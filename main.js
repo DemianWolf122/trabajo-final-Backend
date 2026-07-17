@@ -29,11 +29,10 @@ const startApp = async () => {
                 auth: {
                     register: 'POST /api/auth/register',
                     verifyEmail: 'GET /api/auth/verify-email?verification_token=...',
-                    login: 'POST /api/auth/login',
-                    guest: 'POST /api/auth/guest'
+                    login: 'POST /api/auth/login'
                 },
                 contactos: 'GET|POST /api/contactos , GET|PUT|DELETE /api/contactos/:id  (requiere token)',
-                mensajes: 'GET /api/mensajes?contactoId=... , POST /api/mensajes , DELETE /api/mensajes/vaciar/:contactoId  (requiere token)',
+                mensajes: 'GET /api/mensajes?contactoId=... , POST /api/mensajes , PUT /api/mensajes/leer/:contactoId , DELETE /api/mensajes/vaciar/:contactoId  (requiere token)',
                 comunidades: 'GET|POST /api/comunidades , GET|PUT|DELETE /api/comunidades/:id  (requiere token)',
                 perfil: 'GET|PUT /api/auth/me  (requiere token)'
             }

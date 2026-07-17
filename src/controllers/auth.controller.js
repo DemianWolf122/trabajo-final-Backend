@@ -49,20 +49,6 @@ class AuthController {
         }
     }
 
-    async guestLogin(req, res, next) {
-        try {
-            const { token, user } = await authService.guestLogin()
-            return res.status(200).json({
-                message: 'Ingreso como invitado',
-                ok: true,
-                status: 200,
-                data: { token, user }
-            })
-        } catch (error) {
-            next(error)
-        }
-    }
-
     // Perfil del usuario logueado (protegido por authMiddleware)
     async me(req, res, next) {
         try {
