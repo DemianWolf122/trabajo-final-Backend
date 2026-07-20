@@ -30,21 +30,29 @@ class AuthService {
         const base = ENVIRONMENT.URL_BACKEND || baseUrl
         const verification_url = `${base}/api/auth/verify-email?verification_token=${verification_token}`
 
+        let mailEnviado = false
         if (isMailerConfigured) {
-            await mailer_transport.sendMail({
-                from: ENVIRONMENT.GMAIL_USERNAME,
-                to: email,
-                subject: 'Verifica tu mail - Chat App',
-                html: `<h1>Bienvenido/a, ${nombre}!</h1>
-                       <p>Hace click en el siguiente link para verificar tu cuenta:</p>
-                       <a href="${verification_url}">Verificar mi cuenta</a>`
-            })
+            try {
+                await mailer_transport.sendMail({
+                    from: ENVIRONMENT.GMAIL_USERNAME,
+                    to: email,
+                    subject: 'Verifica tu mail - Chat App',
+                    html: `<h1>Bienvenido/a, ${nombre}!</h1>
+                           <p>Hace click en el siguiente link para verificar tu cuenta:</p>
+                           <a href="${verification_url}">Verificar mi cuenta</a>`
+                })
+                mailEnviado = true
+            } catch (error) {
+                // Si falla el envio no cortamos el registro: el usuario ya se creo.
+                console.error('No se pudo enviar el mail de verificacion:', error.message)
+            }
         } else {
             console.log(`\n[MAILER NO CONFIGURADO] Link de verificacion para ${email}:\n${verification_url}\n`)
         }
 
         const result = { id: newUser._id, nombre: newUser.nombre, email: newUser.email }
-        if (!isMailerConfigured) result.verification_url = verification_url
+        // Si el mail no salio, devolvemos el link para que igual se pueda verificar la cuenta.
+        if (!mailEnviado) result.verification_url = verification_url
         return result
     }
 
