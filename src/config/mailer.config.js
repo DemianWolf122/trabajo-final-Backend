@@ -7,11 +7,18 @@ export const isMailerConfigured = Boolean(ENVIRONMENT.GMAIL_USERNAME && ENVIRONM
 
 const mailer_transport = isMailerConfigured
     ? nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
         auth: {
             user: ENVIRONMENT.GMAIL_USERNAME,
             pass: ENVIRONMENT.GMAIL_PASSWORD
-        }
+        },
+        // Si el servidor de mail no contesta, cortamos rapido para no dejar
+        // el registro esperando (algunos hostings bloquean la salida SMTP).
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 10000
     })
     : null
 
