@@ -51,6 +51,14 @@
           }
         },
         {
+          "name": "Ver contacto",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/contactos/ID_DEL_CONTACTO", "host": ["{{baseUrl}}"], "path": ["api", "contactos", "ID_DEL_CONTACTO"] }
+          }
+        },
+        {
           "name": "Crear contacto",
           "request": {
             "method": "POST",
@@ -97,6 +105,30 @@
             "body": { "mode": "raw", "raw": "{\n  \"texto\": \"Hola!\",\n  \"contactoId\": \"ID_DEL_CONTACTO\"\n}" },
             "url": { "raw": "{{baseUrl}}/api/mensajes", "host": ["{{baseUrl}}"], "path": ["api", "mensajes"] }
           }
+        },
+        {
+          "name": "Marcar como leidos",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/mensajes/leer/ID_DEL_CONTACTO", "host": ["{{baseUrl}}"], "path": ["api", "mensajes", "leer", "ID_DEL_CONTACTO"] }
+          }
+        },
+        {
+          "name": "Vaciar chat",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/mensajes/vaciar/ID_DEL_CONTACTO", "host": ["{{baseUrl}}"], "path": ["api", "mensajes", "vaciar", "ID_DEL_CONTACTO"] }
+          }
+        },
+        {
+          "name": "Borrar mensaje",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/mensajes/ID_DEL_MENSAJE", "host": ["{{baseUrl}}"], "path": ["api", "mensajes", "ID_DEL_MENSAJE"] }
+          }
         }
       ]
     },
@@ -112,12 +144,29 @@
           }
         },
         {
+          "name": "Ver comunidad",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "url": { "raw": "{{baseUrl}}/api/comunidades/ID_DE_LA_COMUNIDAD", "host": ["{{baseUrl}}"], "path": ["api", "comunidades", "ID_DE_LA_COMUNIDAD"] }
+          }
+        },
+        {
           "name": "Crear comunidad",
           "request": {
             "method": "POST",
             "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
             "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Mi Comunidad\",\n  \"descripcion\": \"Descripcion de ejemplo\"\n}" },
             "url": { "raw": "{{baseUrl}}/api/comunidades", "host": ["{{baseUrl}}"], "path": ["api", "comunidades"] }
+          }
+        },
+        {
+          "name": "Editar comunidad",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Comunidad Editada\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/comunidades/ID_DE_LA_COMUNIDAD", "host": ["{{baseUrl}}"], "path": ["api", "comunidades", "ID_DE_LA_COMUNIDAD"] }
           }
         },
         {
